@@ -1,0 +1,80 @@
+{% comment %} Layout: theme.liquid {% endcomment %}
+
+/// original theme code ///
+
+{% if product.available == false %} /// loop to ensure form gets rendered only for OOS products and only for specific templates
+    {% unless product.template_suffix == 'offline' or product.template_suffix == 'offline_without_features' %}
+  <script src="https://a.klaviyo.com/media/js/onsite/onsite.js"></script>
+<script>
+    var klaviyo = klaviyo || [];
+    klaviyo.init({
+        account: "[PUBLIC API KEY]",
+        platform: "shopify"
+    });
+
+    function getTranslations(locale) {
+        const translations = {
+            "en": {
+                product_page_text: "Notify Me",
+                modal_headline: "{product_name}",
+                modal_body_content: "We regret to inform you that, due to high demand, {product_name} is currently out of stock. <br> <br>",
+                email_field_label: "Enter your e-mail",
+                button_label: "SIGN UP",
+                subscription_success_label: "Rest assured, we will let you know as soon as {product_name} is back in stock. <br> <br> Thank you so much for your understanding and patience. We appreciate your continued support.",
+                newsletter_subscribe_label: "I consent to the processing of my personal data for direct marketing purposes, invitations to events, participation in market research and for customer satisfaction surveys (via email, post, telephone calls, including by automated means - SMS and/or social media) relating to the products and services of Eredi Zucca.",
+              footer_content: '<br> By clicking Sign up, you accept the Terms of Use. <br> We will collect your details in accordance with our privacy policy'
+            },
+            /// custom translation ///
+            "it": {
+                product_page_text: "Avvisami",
+                modal_headline: "{product_name}",
+                modal_body_content: "Siamo spiacenti di informarti che, a causa dell'elevata domanda, {product_name} è attualmente esaurito. <br> <br>",
+                email_field_label: "Inserisci la tua email",
+                button_label: "ISCRIVITI",
+                subscription_success_label: "Sii certo che ti faremo sapere non appena {product_name} sarà di nuovo disponibile. <br> <br> Grazie mille per la tua comprensione e pazienza. Apprezziamo il tuo continuo supporto.",
+                newsletter_subscribe_label: "Acconsento al trattamento dei miei dati personali per scopi di marketing diretto, inviti a eventi, partecipazione a ricerche di mercato e per sondaggi sulla soddisfazione del cliente (via e-mail, posta, telefonate, anche tramite mezzi automatizzati - SMS e/o social media) relativi ai prodotti e servizi di Eredi Zucca.",
+              footer_content: '<br> Cliccando su Iscriviti, accetti i Termini di utilizzo. <br> Raccoglieremo i tuoi dati in conformità con la nostra politica sulla privacy'
+            }
+        };
+        return translations[locale] || translations["en"];
+    }
+
+    var locale = document.documentElement.lang || 'en';  // Default to 'en' if locale is not set
+    var translation = getTranslations(locale);
+
+    klaviyo.enable("backinstock", { 
+        trigger: {
+            product_page_text: translation.product_page_text,
+            product_page_class: "btn",
+            product_page_text_align: "center",
+            product_page_margin: "0px",
+            alternate_anchor: "product__submit",
+            replace_anchor: true
+        },
+        modal: {
+            headline: translation.modal_headline,
+            body_content: translation.modal_body_content,
+            email_field_label: translation.email_field_label,
+            button_label: translation.button_label,
+            subscription_success_label: translation.subscription_success_label,
+             newsletter_subscribe_label: translation.newsletter_subscribe_label,
+            footer_content: translation.footer_content,
+            additional_styles: "@import url('{{ 'klaviyo_bis_modal.css' | asset_url }}');",
+            drop_background_color: "#000",
+            background_color: "#010101",
+            text_color: "#D9D2CA",
+            button_text_color: "#AB8C52",
+            button_background_color: "#010101",
+            close_button_color: "#D9D2CA",
+            error_background_color: "#fcd6d7",
+            error_text_color: "#C72E2F",
+            success_background_color: "#010101",
+            success_text_color: "#AB8C52"
+        }
+    });
+</script>
+      {% endunless %}
+    {% endif %}
+  <!-- End of klaviyo trigger -->
+
+  </body>
